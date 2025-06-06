@@ -99,14 +99,15 @@ def command_created(args: adsk.core.CommandCreatedEventArgs):
     inputs.addImageCommandInput('image', '', 'commands/createWaveDrive/resources/diagram.png')
     inputs.addValueInput(ID_ROLLER_DIAMETER, 'Roller diameter', len_units, adsk.core.ValueInput.createByString('6'))
     inputs.addIntegerSpinnerCommandInput(ID_ROLLERS_NUMBER, 'Rollers number', 5, 100, 1, 17)
-    inputs.addBoolValueInput(ID_USE_BALLS, 'Use balls', True, '', True)
+    inputs.addBoolValueInput(ID_USE_BALLS, 'Use balls', True, '', False)
     inputs.addValueInput(ID_ROLLER_HEIGHT, 'Roller height', len_units, adsk.core.ValueInput.createByString('6'))
-    inputs.addBoolValueInput(ID_USE_MINIMAL_DIAMETER, 'Use minimal cycloid diameter', True, '', True)
+    inputs.addBoolValueInput(ID_USE_MINIMAL_DIAMETER, 'Use minimal cycloid diameter', True, '', False)
     inputs.addValueInput(ID_CYCLOID_DIAMETER, 'Cycloid outer diameter', len_units,
-                         adsk.core.ValueInput.createByString('70'))
+                         adsk.core.ValueInput.createByString('75'))
     inputs.addValueInput(ID_INPUT_SHAFT_DIAMETER, 'Input shaft diameter', len_units,
                          adsk.core.ValueInput.createByString('5'))
-    inputs.addValueInput(ID_ROLLER_TOLERANCE, 'Rollers tolerance', len_units, adsk.core.ValueInput.createByString('1'))
+    inputs.addValueInput(ID_ROLLER_TOLERANCE, 'Rollers tolerance', len_units,
+                         adsk.core.ValueInput.createByString('0.1'))
     plane_select = inputs.addSelectionInput(ID_INPUT_PLANE, 'Input plane', 'tooltip')
     plane_select.addSelectionFilter(adsk.core.SelectionCommandInput.PlanarFaces)
     plane_select.addSelectionFilter(adsk.core.SelectionCommandInput.ConstructionPlanes)
