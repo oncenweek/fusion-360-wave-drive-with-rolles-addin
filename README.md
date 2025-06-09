@@ -13,10 +13,12 @@ directory and turn on the addon in addon's settings menu in Fusion 360.
 
 ## Parameters
 
+![alt text](./commands/createWaveDrive/resources/diagram-big.png "Diagram")
+
 - **roller diameter** - diameter of rolling elements (balls or rollers)
 
 - **rollers number** - number of rolling elements.
-  equals to reduction ration of the reducer
+  equals to reduction ratio of the reducer
 
 - **use balls** - if checked reducer will be drawn with a balls as rolling element,
   otherwise with the cylindrical rollers

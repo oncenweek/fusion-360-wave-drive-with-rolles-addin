@@ -136,10 +136,14 @@ def command_execute(args: adsk.core.CommandEventArgs):
     component = root.occurrences.addNewComponent(adsk.core.Matrix3D.create()).component
     component.name = 'RollerWaveDrive-1-to-{}'.format(params.roller_number)
 
+    start_index = design.timeline.count - 1
+
     builder.draw_gear(params, component, plane)
     builder.draw_separator(params, component, plane)
     builder.draw_cam(params, component, plane)
     builder.draw_rollers(params, component, plane)
+
+    design.timeline.timelineGroups.add(start_index, design.timeline.count - 1)
 
 
 # This event handler is called when the user changes anything in the command dialog
@@ -152,7 +156,7 @@ def command_input_changed(args: adsk.core.InputChangedEventArgs):
         roller_height_input: adsk.core.ValueCommandInput = inputs.itemById(ID_ROLLER_HEIGHT)
         roller_height_input.isEnabled = not use_balls_input.value
 
-    if changed_input.id == ID_USE_MINIMAL_DIAMETER:
+    if changed_input.id in [ID_USE_MINIMAL_DIAMETER, ID_ROLLERS_NUMBER, ID_ROLLER_DIAMETER]:
         use_minimal_diameter_input: adsk.core.BoolValueCommandInput = inputs.itemById(ID_USE_MINIMAL_DIAMETER)
         cycloid_diameter_input: adsk.core.ValueCommandInput = inputs.itemById(ID_CYCLOID_DIAMETER)
         use_minimal_diameter = use_minimal_diameter_input.value

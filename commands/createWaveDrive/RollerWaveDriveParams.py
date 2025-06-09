@@ -3,6 +3,7 @@ import math
 
 class RollerWaveDriveParams:
     RESOLUTION = 128
+    ECCENTRICITY = 0.2
 
     def __init__(self, roller_diameter: float, rollers_number: int, use_balls: bool, roller_height: float,
                  use_minimal_diameter: bool, cycloid_diameter: float, shaft_diameter: float, roller_tolerance: float):
@@ -17,7 +18,7 @@ class RollerWaveDriveParams:
 
     @property
     def roller_height(self) -> float:
-        return self.roller_diameter if self.use_balls else self.roller_height
+        return self.roller_diameter if self.use_balls else self._roller_height
 
     @property
     def min_cycloid_radius(self) -> float:
@@ -26,7 +27,7 @@ class RollerWaveDriveParams:
 
     @property
     def eccentricity(self) -> float:
-        return 0.2 * self.roller_diameter
+        return self.ECCENTRICITY * self.roller_diameter
 
     @property
     def internal_radius(self) -> float:
