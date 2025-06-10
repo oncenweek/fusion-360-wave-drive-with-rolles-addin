@@ -141,7 +141,10 @@ def command_execute(args: adsk.core.CommandEventArgs):
     builder.draw_gear(params, component, plane)
     builder.draw_separator(params, component, plane)
     builder.draw_cam(params, component, plane)
-    builder.draw_rollers(params, component, plane)
+    if params.use_balls:
+        builder.draw_balls(params, component, plane)
+    else:
+        builder.draw_rollers(params, component, plane)
 
     design.timeline.timelineGroups.add(start_index, design.timeline.count - 1)
 

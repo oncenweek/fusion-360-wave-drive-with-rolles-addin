@@ -2,7 +2,7 @@ import math
 
 
 class RollerWaveDriveParams:
-    RESOLUTION = 128
+    RESOLUTION = 8
     ECCENTRICITY = 0.2
 
     def __init__(self, roller_diameter: float, rollers_number: int, use_balls: bool, roller_height: float,
@@ -52,3 +52,7 @@ class RollerWaveDriveParams:
     @property
     def separator_outer_radius(self) -> float:
         return self.separator_middle_radius + self.separator_thickness / 2
+
+    @property
+    def resolution(self) -> int:
+        return self.RESOLUTION * (self.roller_number + 1)
