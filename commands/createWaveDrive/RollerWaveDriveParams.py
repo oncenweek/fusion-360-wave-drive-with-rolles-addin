@@ -6,7 +6,9 @@ class RollerWaveDriveParams:
     ECCENTRICITY = 0.2
 
     def __init__(self, roller_diameter: float, rollers_number: int, use_balls: bool, roller_height: float,
-                 use_minimal_diameter: bool, cycloid_diameter: float, shaft_diameter: float, roller_tolerance: float):
+                 use_minimal_diameter: bool, cycloid_diameter: float, shaft_diameter: float, roller_tolerance: float,
+                 body_diameter: float, bearing_outer_diameter: float, bearing_inner_diameter: float,
+                 bearing_height: float):
         self.roller_diameter = roller_diameter
         self.roller_number = rollers_number
         self.use_balls = use_balls
@@ -15,6 +17,10 @@ class RollerWaveDriveParams:
         self.cycloid_diameter = cycloid_diameter
         self.shaft_diameter = shaft_diameter
         self.roller_tolerance = roller_tolerance
+        self._body_diameter = body_diameter
+        self.bearing_outer_diameter = bearing_outer_diameter
+        self.bearing_inner_diameter = bearing_inner_diameter
+        self.bearing_height = bearing_height
 
     @property
     def roller_height(self) -> float:
@@ -56,3 +62,11 @@ class RollerWaveDriveParams:
     @property
     def resolution(self) -> int:
         return self.RESOLUTION * (self.roller_number + 1)
+
+    @property
+    def body_diameter(self) -> float:
+        return max(self.cycloid_diameter + 0.2, self._body_diameter)
+
+    @property
+    def bearing_middle_diameter(self) -> float:
+        return (self.bearing_outer_diameter + self.bearing_inner_diameter) / 2

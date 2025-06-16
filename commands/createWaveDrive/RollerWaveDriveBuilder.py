@@ -46,7 +46,7 @@ def draw_gear(params: RollerWaveDriveParams, component: Component, plane: Constr
     profile_spline.isClosed = True
 
     profile_sketch.sketchCurves.sketchCircles.addByCenterRadius(adsk.core.Point3D.create(0, 0, 0),
-                                                                params.cycloid_diameter + 0.2)
+                                                                params.body_diameter)
 
     extrudes = component.features.extrudeFeatures
     prof = profile_sketch.profiles.item(0)
@@ -210,12 +210,33 @@ def draw_rollers(params: RollerWaveDriveParams, component: Component, plane: Con
 def draw_cam(params: RollerWaveDriveParams, component: Component, plane: ConstructionPlane):
     sketch = component.sketches.add(plane)
     sketch.name = 'Cam'
-    sketch.sketchCurves.sketchCircles.addByCenterRadius(adsk.core.Point3D.create(0, 0, 0), params.shaft_diameter)
+    sketch.sketchCurves.sketchCircles.addByCenterRadius(adsk.core.Point3D.create(0, 0, 0),
+                                                        params.shaft_diameter / 2)
     sketch.sketchCurves.sketchCircles.addByCenterRadius(adsk.core.Point3D.create(0, params.eccentricity, 0),
                                                         params.cam_radius)
 
     extrudes = component.features.extrudeFeatures
     prof = sketch.profiles.item(1)
     distance = adsk.core.ValueInput.createByReal(get_extrusion_height(params))
-    disk_extrude = extrudes.addSimple(prof, distance, adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
-    disk_extrude.bodies.item(0).name = "Cam"
+    cam_extrude = extrudes.addSimple(prof, distance, adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
+    cam_extrude.bodies.item(0).name = "Cam"
+
+    sketch = component.sketches.add(plane)
+    sketch.name = 'CamSplit'
+    sketch.sketchCurves.sketchCircles.addByCenterRadius(adsk.core.Point3D.create(0, params.eccentricity, 0),
+                                                        params.bearing_middle_diameter / 2 + 0.1)
+    sketch.sketchCurves.sketchCircles.addByCenterRadius(adsk.core.Point3D.create(0, params.eccentricity, 0),
+                                                        params.bearing_middle_diameter / 2 - 0.1)
+    prof = sketch.profiles.item(0)
+    distance = adsk.core.ValueInput.createByReal(get_extrusion_height(params))
+    extrudes.addSimple(prof, distance, adsk.fusion.FeatureOperations.CutFeatureOperation)
+
+    sketch = component.sketches.add(plane)
+    sketch.name = 'Bearing'
+    sketch.sketchCurves.sketchCircles.addByCenterRadius(adsk.core.Point3D.create(0, params.eccentricity, 0),
+                                                        params.bearing_outer_diameter / 2)
+    sketch.sketchCurves.sketchCircles.addByCenterRadius(adsk.core.Point3D.create(0, params.eccentricity, 0),
+                                                        params.bearing_inner_diameter / 2)
+    prof = sketch.profiles.item(0)
+    distance = adsk.core.ValueInput.createByReal(params.bearing_height)
+    extrudes.addSimple(prof, distance, adsk.fusion.FeatureOperations.CutFeatureOperation)

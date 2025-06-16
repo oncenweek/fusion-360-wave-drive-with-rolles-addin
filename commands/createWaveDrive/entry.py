@@ -40,6 +40,10 @@ ID_CYCLOID_DIAMETER = 'cycloid_diameter'
 ID_INPUT_SHAFT_DIAMETER = 'input_shaft_diameter'
 ID_INPUT_PLANE = 'input_plane'
 ID_ROLLER_TOLERANCE = 'roller_tolerance'
+ID_BODY_DIAMETER = 'body_diameter'
+ID_BEARING_OUTER_DIAMETER = 'bearing_outer_diameter'
+ID_BEARING_INNER_DIAMETER = 'bearing_inner_diameter'
+ID_BEARING_HEIGHT = 'bearing_height'
 
 
 # Executed when add-in is run.
@@ -104,11 +108,20 @@ def command_created(args: adsk.core.CommandCreatedEventArgs):
     inputs.addBoolValueInput(ID_USE_MINIMAL_DIAMETER, 'Use minimal cycloid diameter', True, '', False)
     inputs.addValueInput(ID_CYCLOID_DIAMETER, 'Cycloid outer diameter', len_units,
                          adsk.core.ValueInput.createByString('75'))
+    inputs.addValueInput(ID_BODY_DIAMETER, 'Body diameter', len_units,
+                         adsk.core.ValueInput.createByString('80'))
     inputs.addValueInput(ID_INPUT_SHAFT_DIAMETER, 'Input shaft diameter', len_units,
                          adsk.core.ValueInput.createByString('5'))
     inputs.addValueInput(ID_ROLLER_TOLERANCE, 'Rollers tolerance', len_units,
                          adsk.core.ValueInput.createByString('0.1'))
-    plane_select = inputs.addSelectionInput(ID_INPUT_PLANE, 'Input plane', 'tooltip')
+    inputs.addValueInput(ID_BEARING_OUTER_DIAMETER, 'Bearing outer diameter', len_units,
+                         adsk.core.ValueInput.createByString('21'))
+    inputs.addValueInput(ID_BEARING_INNER_DIAMETER, 'Bearing inner diameter', len_units,
+                         adsk.core.ValueInput.createByString('12'))
+    inputs.addValueInput(ID_BEARING_HEIGHT, 'Bearing height', len_units,
+                         adsk.core.ValueInput.createByString('5'))
+
+    plane_select = inputs.addSelectionInput(ID_INPUT_PLANE, 'Input plane', 'select a plane')
     plane_select.addSelectionFilter(adsk.core.SelectionCommandInput.PlanarFaces)
     plane_select.addSelectionFilter(adsk.core.SelectionCommandInput.ConstructionPlanes)
     plane_select.setSelectionLimits(1, 1)
@@ -199,6 +212,10 @@ def get_params_from_inputs(inputs: adsk.core.CommandInputs) -> RollerWaveDrivePa
     cycloid_diameter_input: adsk.core.ValueCommandInput = inputs.itemById(ID_CYCLOID_DIAMETER)
     shaft_diameter_input: adsk.core.ValueCommandInput = inputs.itemById(ID_INPUT_SHAFT_DIAMETER)
     rollers_tolerance_input: adsk.core.ValueCommandInput = inputs.itemById(ID_ROLLER_TOLERANCE)
+    bearing_outer_diameter_input: adsk.core.ValueCommandInput = inputs.itemById(ID_BEARING_OUTER_DIAMETER)
+    bearing_inner_diameter_input: adsk.core.ValueCommandInput = inputs.itemById(ID_BEARING_INNER_DIAMETER)
+    bearing_height_input: adsk.core.ValueCommandInput = inputs.itemById(ID_BEARING_HEIGHT)
+    body_diameter_input: adsk.core.ValueCommandInput = inputs.itemById(ID_BODY_DIAMETER)
 
     return RollerWaveDriveParams(
         roller_diameter_input.value,
@@ -208,5 +225,9 @@ def get_params_from_inputs(inputs: adsk.core.CommandInputs) -> RollerWaveDrivePa
         use_minimal_diameter_input.value,
         cycloid_diameter_input.value,
         shaft_diameter_input.value,
-        rollers_tolerance_input.value
+        rollers_tolerance_input.value,
+        body_diameter_input.value,
+        bearing_outer_diameter_input.value,
+        bearing_inner_diameter_input.value,
+        bearing_height_input.value
     )
